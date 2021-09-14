@@ -751,6 +751,15 @@ class Auth_Command extends EE_Command {
 	 */
 	public function allsites( $args, $assoc_args ) {
 		echo "It is working";
+		$options = array(
+	  	'return'     => 'all',   // Return 'STDOUT'; use 'all' for full object.
+	    'parse'      => 'json', // Parse captured STDOUT to JSON array.
+	    'launch'     => true,  // Reuse the current process.
+	    'exit_error' => true,   // Halt script execution on error.
+	  );
+		$sites_list_json=EE::runcommand( " site list --format=json",$options);
+		$sites_list=json_decode($sites_list_json->stdout);
+
 	}
 
 }
