@@ -730,5 +730,28 @@ class Auth_Command extends EE_Command {
 			}
 		}
 	}
+
+	/**
+	 * Creates http authentication for all site.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--user=<user>]
+	 * : Username for http auth.
+	 *
+	 * [--pass=<pass>]
+	 * : Password for http auth.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *
+	 *     # Add auth on all sites with username 'rtcamp' and password 'goodwork'
+	 *     $ ee auth all-sites --user='rtcamp' --pass='goodwork'
+	 *
+	 */
+	public function allsites( $args, $assoc_args ) {
+		echo "It is working";
+	}
+
 }
 
