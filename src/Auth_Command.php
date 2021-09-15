@@ -785,7 +785,7 @@ class Auth_Command extends EE_Command {
 			EE::line('User: ' . $assoc_args['user']);
 			EE::line('Pass: ' . $assoc_args['pass']);
 		} else {
-			EE::warning('No auth added.');
+			EE::error('No auth added.');
 		}
 	}
 
