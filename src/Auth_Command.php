@@ -579,6 +579,11 @@ class Auth_Command extends EE_Command {
 
 		verify_htpasswd_is_present();
 
+		if ($args[0] === 'all-sites') {
+			echo 'this will now run new delete command';
+			return;
+		}
+
 		$global   = $this->populate_info( $args, __FUNCTION__ );
 		$site_url = $global ? 'default' : $this->site_data->site_url;
 		$ip       = EE\Utils\get_flag_value( $assoc_args, 'ip' );
