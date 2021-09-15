@@ -683,11 +683,24 @@ class Auth_Command extends EE_Command {
 			if (empty($assoc_args['pass'])) {
 				EE::error('You cannot pass empty password ');
 			}
-			$query_conditions['password'] = $assoc_args['user'];
+			$query_conditions['password'] = $assoc_args['pass'];
 		}
 		EE::confirm('I wish you know what you are doing ! Confirm ?');
 		EE::log('This may take a while...');
-		$sites = Auth::all();
+
+		if (empty($query_conditions)) {
+			$sites = Auth::all();
+			if (empty($sites)) {
+				EE::error('There are no sites');
+			}
+		} else {
+			$sites = Auth::where($query_conditions);
+			if (empty($sites)) {
+				EE::error('No site exists with given username or password');
+			}
+		}
+
+
 		foreach ($sites as $site) {
 			if ($site->site_url !== 'default') {
 
