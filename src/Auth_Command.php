@@ -807,7 +807,7 @@ class Auth_Command extends EE_Command {
 		$existing_auths = Auth::where($query_conditions);
 
 		if (!empty($existing_auths)) {
-			EE::log($log_message);
+			EE::warning($log_message);
 			return true;
 		}
 
