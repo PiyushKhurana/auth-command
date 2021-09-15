@@ -749,42 +749,43 @@ class Auth_Command extends EE_Command {
 	 *     $ ee auth allsites --user='rtcamp' --pass='goodwork'
 	 *
 	 */
-	public function allsites( $args, $assoc_args ) {
+	public function allsites($args, $assoc_args)
+	{
 
-		if(!isset($assoc_args['user']) || !isset($assoc_args['pass'])){
-			EE::error( 'You must specify username and password.' );
+		if (!isset($assoc_args['user']) || !isset($assoc_args['pass'])) {
+			EE::error('You must specify username and password.');
 		}
 
-		if(empty($assoc_args['user'])|| empty($assoc_args['pass'])){
-			EE::error( 'username and password cannot be empty.' );
+		if (empty($assoc_args['user']) || empty($assoc_args['pass'])) {
+			EE::error('username and password cannot be empty.');
 		}
 
-		EE::log( 'Creating auth on all sites...' );
+		EE::log('Creating auth on all sites...');
 
 		$options = array(
-	  	'return'     => 'all',
-	    'parse'      => 'json',
-	    'launch'     => true,
-	    'exit_error' => true,
-	  );
-		$sites_list_json=EE::runcommand( " site list --format=json",$options);
-		$sites_list=json_decode($sites_list_json->stdout);
-		$site_count=0;
-		foreach($sites_list as $site) {
+			'return' => 'all',
+			'parse' => 'json',
+			'launch' => true,
+			'exit_error' => true,
+		);
+		$sites_list_json = EE::runcommand(" site list --format=json", $options);
+		$sites_list = json_decode($sites_list_json->stdout);
+		$site_count = 0;
+		foreach ($sites_list as $site) {
 
-			if(! ($this->is_auth_already_exits($site->site,$assoc_args['user']) )){
-				$new_args=array($site->site);
-				$this->create($new_args,$assoc_args);
-				$site_count=$site_count+1;
+			if (!($this->is_auth_already_exits($site->site, $assoc_args['user']))) {
+				$new_args = array($site->site);
+				$this->create($new_args, $assoc_args);
+				$site_count = $site_count + 1;
 			};
 		}
-		if($site_count>0){
-			$success_message                = "Auth added for $site_count sites with following credentials.";
-			EE::success( $success_message );
-			EE::line( 'User: ' . $assoc_args['user'] );
-			EE::line( 'Pass: ' . $assoc_args['pass'] );
-		}else{
-			EE::warning( 'No auth added.' );
+		if ($site_count > 0) {
+			$success_message = "Auth added for $site_count sites with following credentials.";
+			EE::success($success_message);
+			EE::line('User: ' . $assoc_args['user']);
+			EE::line('Pass: ' . $assoc_args['pass']);
+		} else {
+			EE::warning('No auth added.');
 		}
 	}
 
@@ -796,17 +797,17 @@ class Auth_Command extends EE_Command {
 	 * @return Boolean
 	 * @throws Exception
 	 */
-	private function is_auth_already_exits( $site_url, $user ): bool
+	private function is_auth_already_exits($site_url, $user): bool
 	{
 		$query_conditions = [
 			'site_url' => $site_url,
 			'username' => $user,
 		];
-		$log_message                = "Auth for user $user already exists for the site $site_url. To update it, use `ee auth update`'";
-		$existing_auths = Auth::where( $query_conditions );
+		$log_message = "Auth for user $user already exists for the site $site_url. To update it, use `ee auth update`'";
+		$existing_auths = Auth::where($query_conditions);
 
-		if ( ! empty( $existing_auths ) ) {
-			EE::log( $log_message );
+		if (!empty($existing_auths)) {
+			EE::log($log_message);
 			return true;
 		}
 
