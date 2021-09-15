@@ -750,12 +750,22 @@ class Auth_Command extends EE_Command {
 	 *
 	 */
 	public function allsites( $args, $assoc_args ) {
-		echo "It is working";
+
+		if(!isset($assoc_args['user']) || !isset($assoc_args['pass'])){
+			EE::error( 'You must specify username and password.' );
+		}
+
+		if(empty($assoc_args['user'])|| empty($assoc_args['pass'])){
+			EE::error( 'username and password cannot be empty.' );
+		}
+
+		EE::log( 'Creating auth on all sites...' );
+
 		$options = array(
-	  	'return'     => 'all',   // Return 'STDOUT'; use 'all' for full object.
-	    'parse'      => 'json', // Parse captured STDOUT to JSON array.
-	    'launch'     => true,  // Reuse the current process.
-	    'exit_error' => true,   // Halt script execution on error.
+	  	'return'     => 'all',
+	    'parse'      => 'json',
+	    'launch'     => true,
+	    'exit_error' => true,
 	  );
 		$sites_list_json=EE::runcommand( " site list --format=json",$options);
 		$sites_list=json_decode($sites_list_json->stdout);
@@ -764,6 +774,8 @@ class Auth_Command extends EE_Command {
 			$new_args=array($site->site);
 			$this->create($new_args,$assoc_args);
 		}
+
+		EE::success( 'Auth added for all the sites.' );
 	}
 
 }
