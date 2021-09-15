@@ -667,9 +667,17 @@ class Auth_Command extends EE_Command {
 	 */
 	private function delete_auth_allsites($assoc_args)
 	{
+		$sites = Auth::all();
+		//$sitess=EE\Model\Site::all();
+		echo 'test';
+		foreach ($sites as $site) {
+			if ($site->site_url !== 'default'&&$site->site_url!=='piyush.test') {
 
-		//Here delete the auth on sites
-
+				$new_args = array($site->site_url);
+				$new_assoc_args = array('user' => $site->username);
+				$this->delete($new_args,$new_assoc_args);
+			}
+		}
 	}
 
 
