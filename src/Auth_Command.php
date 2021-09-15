@@ -548,6 +548,9 @@ class Auth_Command extends EE_Command {
 	 * [<site-name>]
 	 * : Name of website / `global` for global scope.
 	 *
+	 * [<all-sites>]
+	 * : To delete auth on all sites
+	 *
 	 * [--user=<user>]
 	 * : Username that needs to be deleted.
 	 *
@@ -576,6 +579,16 @@ class Auth_Command extends EE_Command {
 	 *
 	 *     # Remove whitelisted IPs on all sites
 	 *     $ ee auth delete global --ip=1.1.1.1
+	 *
+	 *       # Delete all auths on all sites.
+	 *     $ ee auth delete all-sites
+	 *
+	 *       # Delete all auths of a user on all sites.
+	 *     $ ee auth delete all-sites --user='rtcamp'
+	 *
+	 *       # Delete all auths of a user which has particular password.
+	 *     $ ee auth delete all-sites --user='rtcamp' --pass='goodwork'
+	 *
 	 *
 	 */
 	public function delete( $args, $assoc_args ) {
