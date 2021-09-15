@@ -667,15 +667,29 @@ class Auth_Command extends EE_Command {
 	 */
 	private function delete_auth_allsites($assoc_args)
 	{
+		$query_conditions = array();
+
+		if (isset($assoc_args['user'])) {
+			if (empty($assoc_args['user'])) {
+				EE::error('You cannot pass empty username ');
+			}
+			$query_conditions['username'] = $assoc_args['user'];
+		}
+
+		if (isset($assoc_args['pass'])) {
+			if (empty($assoc_args['pass'])) {
+				EE::error('You cannot empty password ');
+			}
+			$query_conditions['password'] = $assoc_args['user'];
+		}
+
 		$sites = Auth::all();
-		//$sitess=EE\Model\Site::all();
-		echo 'test';
 		foreach ($sites as $site) {
-			if ($site->site_url !== 'default'&&$site->site_url!=='piyush.test') {
+			if ($site->site_url !== 'default') {
 
 				$new_args = array($site->site_url);
 				$new_assoc_args = array('user' => $site->username);
-				$this->delete($new_args,$new_assoc_args);
+				$this->delete($new_args, $new_assoc_args);
 			}
 		}
 	}
