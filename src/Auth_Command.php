@@ -579,8 +579,9 @@ class Auth_Command extends EE_Command {
 
 		verify_htpasswd_is_present();
 
+		// handle ee auth delete all-sites separately.
 		if ($args[0] === 'all-sites') {
-			echo 'this will now run new delete command';
+			$this->delete_auth_allsites($assoc_args);
 			return;
 		}
 
@@ -657,6 +658,20 @@ class Auth_Command extends EE_Command {
 			reload_global_nginx_proxy();
 		}
 	}
+
+	/**
+	 * Delete auth all the sites.
+	 *
+	 * @param array $assoc_args containing user, pass.
+	 * @throws Exception
+	 */
+	private function delete_auth_allsites($assoc_args)
+	{
+
+		//Here delete the auth on sites
+
+	}
+
 
 	/**
 	 * Lists http authentication users of a site.
