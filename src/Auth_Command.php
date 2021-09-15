@@ -551,6 +551,9 @@ class Auth_Command extends EE_Command {
 	 * [--user=<user>]
 	 * : Username that needs to be deleted.
 	 *
+	 * [--pass=<password>]
+	 * : Password to match
+	 *
 	 * [--ip]
 	 * : IP to remove. Default removes all.
 	 *
@@ -678,18 +681,22 @@ class Auth_Command extends EE_Command {
 
 		if (isset($assoc_args['pass'])) {
 			if (empty($assoc_args['pass'])) {
-				EE::error('You cannot empty password ');
+				EE::error('You cannot pass empty password ');
 			}
 			$query_conditions['password'] = $assoc_args['user'];
 		}
-
+		EE::confirm('I wish you know what you are doing ! Confirm ?');
+		EE::log('This may take a while...');
 		$sites = Auth::all();
 		foreach ($sites as $site) {
 			if ($site->site_url !== 'default') {
 
 				$new_args = array($site->site_url);
 				$new_assoc_args = array('user' => $site->username);
+				$log_message = "Deleting auth on site $site->site_url with user $site->username .";
+				EE::log($log_message);
 				$this->delete($new_args, $new_assoc_args);
+
 			}
 		}
 	}
