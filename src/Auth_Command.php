@@ -746,7 +746,7 @@ class Auth_Command extends EE_Command {
 	 *
 	 *
 	 *     # Add auth on all sites with username 'rtcamp' and password 'goodwork'
-	 *     $ ee auth all-sites --user='rtcamp' --pass='goodwork'
+	 *     $ ee auth allsites --user='rtcamp' --pass='goodwork'
 	 *
 	 */
 	public function allsites( $args, $assoc_args ) {
@@ -760,6 +760,10 @@ class Auth_Command extends EE_Command {
 		$sites_list_json=EE::runcommand( " site list --format=json",$options);
 		$sites_list=json_decode($sites_list_json->stdout);
 
+		foreach($sites_list as $site) {
+			$new_args=array($site->site);
+			$this->create($new_args,$assoc_args);
+		}
 	}
 
 }
