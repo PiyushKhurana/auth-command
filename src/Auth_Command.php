@@ -769,13 +769,49 @@ class Auth_Command extends EE_Command {
 	  );
 		$sites_list_json=EE::runcommand( " site list --format=json",$options);
 		$sites_list=json_decode($sites_list_json->stdout);
-
+		$site_count=0;
 		foreach($sites_list as $site) {
-			$new_args=array($site->site);
-			$this->create($new_args,$assoc_args);
+
+			if(! ($this->is_auth_already_exits($site->site,$assoc_args['user']) )){
+				$new_args=array($site->site);
+				$this->create($new_args,$assoc_args);
+				$site_count=$site_count+1;
+			};
+		}
+		if($site_count>0){
+			$success_message                = "Auth added for $site_count sites with following credentials.";
+			EE::success( $success_message );
+			EE::line( 'User: ' . $assoc_args['user'] );
+			EE::line( 'Pass: ' . $assoc_args['pass'] );
+		}else{
+			EE::warning( 'No auth added.' );
+		}
+	}
+
+	/**
+	 * Check whether auth for given site already exits for the given username.
+	 *
+	 * @param string $site_url Site URL.
+	 * @param string $user User for which the auth need to be fetched.
+	 * @return Boolean
+	 * @throws Exception
+	 */
+	private function is_auth_already_exits( $site_url, $user ): bool
+	{
+		$query_conditions = [
+			'site_url' => $site_url,
+			'username' => $user,
+		];
+		$log_message                = "Auth for user $user already exists for the site $site_url. To update it, use `ee auth update`'";
+		$existing_auths = Auth::where( $query_conditions );
+
+		if ( ! empty( $existing_auths ) ) {
+			EE::log( $log_message );
+			return true;
 		}
 
-		EE::success( 'Auth added for all the sites.' );
+		return false;
+
 	}
 
 }
