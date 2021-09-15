@@ -746,10 +746,10 @@ class Auth_Command extends EE_Command {
 	 *
 	 *
 	 *     # Add auth on all sites with username 'rtcamp' and password 'goodwork'
-	 *     $ ee auth allsites --user='rtcamp' --pass='goodwork'
+	 *     $ ee auth all_sites --user='rtcamp' --pass='goodwork'
 	 *
 	 */
-	public function allsites($args, $assoc_args)
+	public function all_sites($args, $assoc_args)
 	{
 
 		if (!isset($assoc_args['user']) || !isset($assoc_args['pass'])) {
