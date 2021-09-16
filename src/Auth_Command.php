@@ -580,13 +580,13 @@ class Auth_Command extends EE_Command {
 	 *     # Remove whitelisted IPs on all sites
 	 *     $ ee auth delete global --ip=1.1.1.1
 	 *
-	 *       # Delete all auths on all sites.
+	 *     # Delete all auths on all sites.
 	 *     $ ee auth delete all-sites
 	 *
-	 *       # Delete all auths of a user on all sites.
+	 *     # Delete all auths of a user on all sites.
 	 *     $ ee auth delete all-sites --user='rtcamp'
 	 *
-	 *       # Delete all auths of a user which has particular password.
+	 *     # Delete all auths of a user which has particular password.
 	 *     $ ee auth delete all-sites --user='rtcamp' --pass='goodwork'
 	 *
 	 *
@@ -698,7 +698,7 @@ class Auth_Command extends EE_Command {
 			}
 			$query_conditions['password'] = $assoc_args['pass'];
 		}
-		EE::confirm('I wish you know what you are doing ! Confirm ?');
+		EE::confirm('You are about to delete all the http authentication on all the sites ! Please Confirm ?');
 		EE::log('This may take a while...');
 
 		if (empty($query_conditions)) {
@@ -821,7 +821,9 @@ class Auth_Command extends EE_Command {
 	 *
 	 *
 	 *     # Add auth on all sites with username 'rtcamp' and password 'goodwork'
-	 *     $ ee auth all_sites --user='rtcamp' --pass='goodwork'
+	 *     $ ee auth all-sites --user='rtcamp' --pass='goodwork'
+	 *
+	 * @subcommand  all-sites
 	 *
 	 */
 	public function all_sites($args, $assoc_args)
