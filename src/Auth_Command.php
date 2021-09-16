@@ -684,8 +684,17 @@ class Auth_Command extends EE_Command {
 	 *     # List all global auth
 	 *     $ ee auth list global
 	 *
+	 *     # List all auths across all sites
+	 *     $ ee auth list
+	 *
 	 */
 	public function list( $args, $assoc_args ) {
+
+		// handle only 'ee auth list' separately.
+		if ( empty( $args ) ) {
+			$this->display_all_auths();
+			return;
+		}
 
 		$global   = $this->populate_info( $args, __FUNCTION__ );
 		$site_url = $global ? 'default' : $this->site_data->site_url;
@@ -730,5 +739,34 @@ class Auth_Command extends EE_Command {
 			}
 		}
 	}
+
+	/**
+	 * This will display all the auths of all the sites
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private function display_all_auths() {
+		$data      = array();
+		$sites     = Auth::all();
+		$formatter = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
+		foreach ( $sites as $site ) {
+			if ( $site->site_url !== 'default' ) {
+				array_push(
+					$data,
+					array(
+						'site'     => $site->site_url,
+						'username' => $site->username,
+						'password' => $site->password,
+					)
+				);
+			}
+		}
+
+		$formatter->display_items( $data );
+
+
+	}
+
 }
 
