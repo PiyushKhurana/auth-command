@@ -749,8 +749,6 @@ class Auth_Command extends EE_Command {
 	 */
 	private function display_all_auths() {
 
-		$start_time = microtime( true );
-
 		$data       = array();
 		$sites      = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
 		$site_count = count( $sites );
@@ -794,11 +792,6 @@ class Auth_Command extends EE_Command {
 		}
 
 		$formatter->display_items( $data );
-		$end_time       = microtime( true );
-		$execution_time = ( $end_time - $start_time );
-
-		echo ' Execution time of script = ' . $execution_time . ' sec';
-
 
 	}
 
