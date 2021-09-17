@@ -752,7 +752,7 @@ class Auth_Command extends EE_Command {
 		$start_time = microtime( true );
 
 		$data       = array();
-		$sites      = Auth::all();
+		$sites      = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
 		$site_count = count( $sites );
 		$formatter  = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
 
@@ -761,7 +761,7 @@ class Auth_Command extends EE_Command {
 
 		for ( $index = 0;$index < $site_count;$index++ ) {
 
-			if ( $sites[ $index ]->site_url !== 'default' && $visited[ $index ] === false ) {
+			if ( $visited[ $index ] === false ) {
 
 				$curr_site         = $sites[ $index ]->site_url;
 				$position          = $index;
