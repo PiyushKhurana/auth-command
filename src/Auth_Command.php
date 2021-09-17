@@ -684,8 +684,18 @@ class Auth_Command extends EE_Command {
 	 *     # List all global auth
 	 *     $ ee auth list global
 	 *
+	 *     # List all auths across all sites
+	 *     $ ee auth list
+	 *
 	 */
 	public function list( $args, $assoc_args ) {
+
+
+		// handle only 'ee auth list' separately.
+		if ( empty( $args ) ) {
+			$this->display_all_auths();
+			return;
+		}
 
 		$global   = $this->populate_info( $args, __FUNCTION__ );
 		$site_url = $global ? 'default' : $this->site_data->site_url;
@@ -730,5 +740,68 @@ class Auth_Command extends EE_Command {
 			}
 		}
 	}
+
+	/**
+	 * This will display all the auths of all the sites
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private function display_all_auths() {
+
+		$start_time = microtime( true );
+
+		$data       = array();
+		$sites      = Auth::all();
+		$site_count = count( $sites );
+		$formatter  = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
+
+
+		$visited = array_fill( 0, $site_count, false );
+
+		for ( $index = 0;$index < $site_count;$index++ ) {
+
+			if ( $sites[ $index ]->site_url !== 'default' && $visited[ $index ] === false ) {
+
+				$curr_site         = $sites[ $index ]->site_url;
+				$position          = $index;
+				$visited[ $index ] = true;
+				array_push(
+					$data,
+					array(
+						'site'     => $sites[ $index ]->site_url,
+						'username' => $sites[ $index ]->username,
+						'password' => $sites[ $index ]->password,
+					)
+				);
+
+				for ( $j = $position + 1;$j < $site_count;$j++ ) {
+
+					if ( $sites[ $j ]->site_url === $curr_site ) {
+
+						array_push(
+							$data,
+							array(
+								'site'     => $sites[ $j ]->site_url,
+								'username' => $sites[ $j ]->username,
+								'password' => $sites[ $j ]->password,
+							)
+						);
+						$visited[ $j ] = true;
+					}
+				}
+			}
+		}
+
+		$formatter->display_items( $data );
+		$end_time       = microtime( true );
+		$execution_time = ( $end_time - $start_time );
+
+		echo ' Execution time of script = ' . $execution_time . ' sec';
+
+
+	}
+
+
 }
 
