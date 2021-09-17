@@ -751,8 +751,8 @@ class Auth_Command extends EE_Command {
 
 		$data = array();
 
-		// Fetch all the auths across all the sites other than global auth
-		$sites = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
+		// Fetch all the auths across all the sites.
+		$sites = Auth::all();
 
 		$site_count = count( $sites );
 		$formatter  = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
