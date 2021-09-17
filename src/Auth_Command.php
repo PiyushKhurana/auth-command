@@ -748,23 +748,22 @@ class Auth_Command extends EE_Command {
 	 */
 	private function display_all_auths() {
 		$data      = array();
-		$sites     = Auth::all();
+		$sites     = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
 		$formatter = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
+
 		foreach ( $sites as $site ) {
-			if ( $site->site_url !== 'default' ) {
-				array_push(
-					$data,
-					array(
-						'site'     => $site->site_url,
-						'username' => $site->username,
-						'password' => $site->password,
-					)
-				);
-			}
+			array_push(
+				$data,
+				array(
+					'site'     => $site->site_url,
+					'username' => $site->username,
+					'password' => $site->password,
+				)
+			);
+
 		}
 
 		$formatter->display_items( $data );
-
 
 	}
 
