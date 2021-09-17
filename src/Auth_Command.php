@@ -749,18 +749,23 @@ class Auth_Command extends EE_Command {
 	 */
 	private function display_all_auths() {
 
-		$data       = array();
-		$sites      = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
+		$data = array();
+
+		// Fetch all the auths across all the sites other than global auth
+		$sites = Auth::where( [ [ 'site_url', '!=', 'default' ] ] );
+
 		$site_count = count( $sites );
 		$formatter  = new EE\Formatter( $assoc_args, [ 'site', 'username', 'password' ] );
 
-
+		// Initialize all auths as not visited.
 		$visited = array_fill( 0, $site_count, false );
 
 		for ( $index = 0;$index < $site_count;$index++ ) {
 
-			if ( $visited[ $index ] === false ) {
+			// Check if this is first occurrence.
+			if ( ! $visited[ $index ] ) {
 
+				// If yes, add it to 'data' array.
 				$curr_site         = $sites[ $index ]->site_url;
 				$position          = $index;
 				$visited[ $index ] = true;
@@ -773,6 +778,7 @@ class Auth_Command extends EE_Command {
 					)
 				);
 
+				// And now find all subsequent occurrences of it and also add it to array.
 				for ( $j = $position + 1;$j < $site_count;$j++ ) {
 
 					if ( $sites[ $j ]->site_url === $curr_site ) {
@@ -785,6 +791,7 @@ class Auth_Command extends EE_Command {
 								'password' => $sites[ $j ]->password,
 							)
 						);
+						// Mark it as 'true' so that the 'data' array do not contain duplicates.
 						$visited[ $j ] = true;
 					}
 				}
