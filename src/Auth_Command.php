@@ -282,6 +282,19 @@ class Auth_Command extends EE_Command {
 				)
 			);
 
+			$is_default_admin_tools_only = false;
+			if ( count( $sites ) === 1 && $sites[0]->site_url === 'default_admin_tools' ) {
+				$is_default_admin_tools_only = true;
+			}
+			if ( empty( $sites ) || $is_default_admin_tools_only ) {
+				$all_sites = \EE\Model\Site::all();
+
+				foreach ( $all_sites as $single_site ) {
+					$this->generate_site_auth_files( $single_site->site_url );
+				}
+			}
+
+
 			foreach ( $sites as $site ) {
 				$this->generate_site_auth_files( $site );
 			}
